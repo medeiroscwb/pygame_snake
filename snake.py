@@ -1,4 +1,4 @@
-import pygame, random, sqlite3
+import pygame, random, sqlite3, time, sys
 from pygame.locals import *
 
 player_name = ("medeiroscwb")
@@ -79,6 +79,30 @@ def on_grid_random():
 def collision(c1,c2):
     return (c1[0] == c2[0]) and (c1[1] == c2[1])
 
+def order_results():
+    conn = sqlite3.connect("{}.db".format(db_name))
+    c = conn.cursor()
+    c.execute("SELECT scr, * FROM {} ORDER BY scr DESC".format(tab_name))
+    tab_all = c.fetchall()
+    for line in tab_all:
+        print(line)
+    print("^SCORE^")
+    conn.commit()
+    conn.close()
+    
+
+def exit():
+    insert_row()
+    order_results()
+    pygame.quit()
+    time.sleep(1)
+    print('Your score is')
+    time.sleep(1)
+    print('...')
+    time.sleep(1)
+    print(score)
+    time.sleep(3)
+    sys.exit()
 
 pygame.mixer.init()
 pygame.mixer.music.load('The_Insider_-_05_-_Right.mp3')
@@ -91,9 +115,7 @@ while True:
     for event in pygame.event.get():
 
         if event.type == QUIT:
-            print(score)
-            insert_row()
-            pygame.quit()
+            exit()
 
 
         if event.type == KEYDOWN:
@@ -110,7 +132,8 @@ while True:
             if event.key == K_ESCAPE:
                 print(score)
                 pygame.quit()
-                query()
+            if event.key == K_s:
+                order_results()
 
     screen.fill((0,25,25))
     screen.blit(apple_skin,apple_pos)
@@ -145,28 +168,16 @@ while True:
     coord_y = coord[1]
 
     if coord_x < 0:
-        insert_row()
-        print(score)
-        pygame.quit()
-        query()
+        exit()
 
     if coord_x > screen_x - blocksize:
-        print(score)
-        insert_row()
-        pygame.quit()
-        query()
+        exit()
 
     if coord_y < 0:
-        print(score)
-        insert_row()
-        pygame.quit()
-        query()
+        exit()
 
     if coord_y > screen_y - blocksize:
-        print(score)
-        insert_row()
-        pygame.quit()
-        query()
-        
-    full_snake = snake
+        exit()
+
     pygame.display.update()
+

@@ -25,7 +25,18 @@ def query():
     conn.commit()
     conn.close()
 
+def order_results():
+    conn = sqlite3.connect("{}.db".format(db_name))
+    c = conn.cursor()
+    c.execute("SELECT scr, * FROM {} ORDER BY scr DESC".format(tab_name))
+    tab_all = c.fetchall()
+    for line in tab_all:
+        print(line)
+    print("Table Ordered.")
+    conn.commit()
+    conn.close()
+
 #gen_table()
-query()
 os.system('python snake.py')
+order_results()
 
