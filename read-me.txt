@@ -1,0 +1,11 @@
+A simple snake game using pygame mod
+there is yet a lot of simple implementations to do as well as refactoring.
+
+To open it, make sure you installed by "pip install" all the following mods:
+ 
+ - pygame
+ - random
+ - sqlite3
+ - time
+ - sys
+
